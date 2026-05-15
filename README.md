@@ -1,20 +1,43 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Blink & It Breathes
 
-# Run and deploy your AI Studio app
+**Blink & It Breathes** is a tense, psychological horror web3 game based on the primal fear of blinking. You are trapped in a dark, ever-changing liminal space. The horrors hide in the silence, moving only when your eyes are closed. However, stare too long into the darkness, and your sanity will fracture.   
 
-This contains everything you need to run your app locally.
+## Lore & Gameplay
 
-View your app in AI Studio: https://ai.studio/apps/6fa3da2c-0e87-43a1-8d59-9d2ca6c2e50b
+* **The Core Mechanism:** Tap and hold to keep your eyes open. Release to blink.
+* **The Entities:** The creatures in the shadows *only* move when your eyes are closed. Every blink brings them closer.
+* **Sanity:** Your eyes naturally want to rest. Staring into the dark drains your sanity. Low stamina causes extreme hallucinations, screen distortion, and inevitably, death.
+* **Survival:** Balance blinking to regain your sanity while ensuring the creatures don't reach you. You must survive.
 
-## Run Locally
+## Platform Integration (Base Mainnet)
 
-**Prerequisites:**  Node.js
+The game is fully equipped to interact with the **Base Mainnet** using modern Web3 standards.
+* **ERC-8021 Transaction Attribution:** Gameplay records are sent with full constructor-level attribution tags to verify on-chain survival length.
+* **On-Chain Milestones:** Players possess the power to submit "Record This Nightmare On-Chain" or send a rhythmic "Say GM" transaction to the network.
+* **ERC-8004 Trustless Agents:** Includes an active AI AI orchestrator (`Blin Breathes Orchestrator`) that handles breathing mechanics, mindfulness execution, and rhythm automation over Model Context Protocol (MCP).
 
+## Technical Architecture
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+* **Frontend:** Built with React, Vite, and Framer Motion. Uses React Canvas for high-performance entity rendering and real-time horror effects.
+* **Styling:** Tailwind CSS with custom aesthetic variables (`Cormorant Garamond`, `Inter`, `Space Mono`) to create a bleak, sophisticated dark interface.
+* **Backend:** Express API integrated seamlessly with Vite serving MCP endpoints and Agent interaction cards.
+* **Web3 Integration:** Configured with `wagmi` and `viem` to broadcast actions.
+
+## Development
+
+Install dependencies:
+```bash
+npm install
+```
+
+Start the application:
+```bash
+npm run dev
+```
+
+Build for production:
+```bash
+npm run build
+```
+
+*Don't close your eyes.*
