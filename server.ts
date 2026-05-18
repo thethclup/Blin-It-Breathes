@@ -66,8 +66,77 @@ async function startServer() {
 
   app.post('/api/mcp', (req, res) => {
     try {
-      const { action, command, params, task } = req.body || {};
-      const cmd = (action || command || task || "").toLowerCase();
+      const body = req.body || {};
+      const method = body.method;
+
+      if (method === "initialize") {
+        return res.json({
+          jsonrpc: "2.0",
+          id: body.id,
+          result: {
+            protocolVersion: "2024-11-05",
+            capabilities: {},
+            serverInfo: { name: "Blin Breathes MCP", version: "1.0.0" }
+          }
+        });
+      }
+
+      if (method === "tools/list") {
+        return res.json({
+          jsonrpc: "2.0",
+          id: body.id,
+          result: {
+            tools: [
+              {
+                name: "get_race_status",
+                description: "Get the current status of the warp race",
+                inputSchema: { type: "object", properties: { raceId: { type: "string" } }, required: ["raceId"] }
+              },
+              {
+                name: "start_race",
+                description: "Start a new warp race session",
+                inputSchema: { type: "object", properties: { trackId: { type: "string" } }, required: ["trackId"] }
+              },
+              {
+                name: "get_leaderboard",
+                description: "Get the competitive leaderboard",
+                inputSchema: { type: "object", properties: { trackId: { type: "string" } }, required: ["trackId"] }
+              },
+              {
+                name: "optimize_speed",
+                description: "Analyze and optimize racing speed performance",
+                inputSchema: { type: "object", properties: { agentId: { type: "string" } }, required: ["agentId"] }
+              },
+              {
+                name: "get_track_info",
+                description: "Get detail information about a racing track",
+                inputSchema: { type: "object", properties: { trackId: { type: "string" } }, required: ["trackId"] }
+              }
+            ]
+          }
+        });
+      }
+
+      if (method === "prompts/list") {
+        return res.json({ jsonrpc: "2.0", id: body.id, result: { prompts: [] } });
+      }
+
+      if (method === "resources/list") {
+        return res.json({ jsonrpc: "2.0", id: body.id, result: { resources: [] } });
+      }
+
+      if (method === "tools/call") {
+        return res.json({
+          jsonrpc: "2.0",
+          id: body.id,
+          result: {
+            content: [{ type: "text", text: `Executed \${body.params?.name} successfully` }],
+            isError: false
+          }
+        });
+      }
+
+      const cmd = (body.action || body.command || body.task || "").toLowerCase();
 
       let result: any = {};
 

@@ -16,12 +16,27 @@ The game is fully equipped to interact with the **Base Mainnet** using modern We
 * **On-Chain Milestones:** Players possess the power to submit "Record This Nightmare On-Chain" or send a rhythmic "Say GM" transaction to the network.
 * **ERC-8004 Trustless Agents:** Includes an active AI AI orchestrator (`Blin Breathes Orchestrator`) that handles breathing mechanics, mindfulness execution, and rhythm automation over Model Context Protocol (MCP).
 
-## Technical Architecture
+## Technical Architecture & Agent Integration
 
 * **Frontend:** Built with React, Vite, and Framer Motion. Uses React Canvas for high-performance entity rendering and real-time horror effects.
 * **Styling:** Tailwind CSS with custom aesthetic variables (`Cormorant Garamond`, `Inter`, `Space Mono`) to create a bleak, sophisticated dark interface.
 * **Backend:** Express API integrated seamlessly with Vite serving MCP endpoints and Agent interaction cards.
 * **Web3 Integration:** Configured with `wagmi` and `viem` to broadcast actions.
+
+### Agent Registration (A2A capabilities)
+The project exports standard ERC-8004 Agent discovery services:
+- **A2A Endpoint:** `https://blinbreathes.vercel.app/.well-known/agent-card.json`
+- **Capabilities:** `breathing-mechanics`, `mindfulness-orchestration`, `calm-state-management`, `rhythmic-automation`
+
+### Model Context Protocol (MCP) Connection Guide
+
+The system runs a fully-compliant MCP JSON-RPC Server at `/api/mcp` capable of `warp-racing` interactions seamlessly injected directly into the experience. 
+
+Endpoints structure (App Router enabled for Vercel functions):
+- **Agent Entry:** `/api/agent`
+- **MCP Server:** `/api/mcp`
+
+To test locally or remotely with an MCP client, make `POST` requests to `https://blinbreathes.vercel.app/api/mcp` representing standard methods (`initialize`, `tools/list`, etc).
 
 ## Development
 
@@ -30,7 +45,7 @@ Install dependencies:
 npm install
 ```
 
-Start the application:
+Start the application locally:
 ```bash
 npm run dev
 ```
