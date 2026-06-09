@@ -6,7 +6,7 @@ import { parseEther } from 'viem';
 import { GAME_ERC8021_CONFIG, buildAttributedCalldata } from '../lib/erc8021';
 
 export default function ResultScreen() {
-  const { timeSurvived, setScreen, resetGame } = useGameStore();
+  const { sessionDuration, harmony, setScreen, resetGame } = useGameStore();
   const { address, isConnected } = useAccount();
   const { connect } = useConnect();
   const { disconnect } = useDisconnect();
@@ -19,79 +19,65 @@ export default function ResultScreen() {
   };
 
   const handleRecordOnChain = () => {
-    // Simulate recording survival time on chain or SIWE signature
-    const dummyCalldata = "0x" + stringToHex("SurvivalTime:" + Math.floor(timeSurvived));
+    const dummyCalldata = "0x" + stringToHex(`SessionTime:${Math.floor(sessionDuration)}|Harmony:${Math.floor(harmony)}`);
     const attributedData = buildAttributedCalldata(dummyCalldata, GAME_ERC8021_CONFIG);
 
     sendTransaction({
-      to: address, // sending to self with data as a dummy record
+      to: address,
       data: attributedData as `0x${string}`,
       value: parseEther('0'),
     });
   };
 
-  const handleSayGM = () => {
-    const gmData = "0x" + stringToHex("GM");
-    sendTransaction({
-      to: address,
-      data: gmData as `0x${string}`,
-      value: parseEther('0'),
-    });
-  };
-
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="flex flex-col items-center justify-center w-full h-screen bg-[#8A0303] bg-opacity-20 relative p-6"
+      className="flex flex-col items-center justify-center w-full h-screen bg-[#0B0F19] relative p-6"
     >
-      <div className="absolute inset-0 bg-black mix-blend-multiply z-0"></div>
-      
-      <div className="z-10 flex flex-col items-center max-w-md w-full text-center">
-        <h1 className="text-5xl md:text-7xl font-serif text-white uppercase tracking-widest drop-shadow-[0_0_10px_red]">
-           You Blinked
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-lg rounded-full bg-gradient-to-r from-[#2B6CB0]/20 to-[#319795]/20 blur-[100px] pointer-events-none" />
+
+      <div className="z-10 flex flex-col items-center max-w-md w-full text-center bg-black/20 backdrop-blur-md p-10 rounded-[3rem] border border-white/5 shadow-2xl">
+        <h1 className="text-3xl md:text-4xl font-serif text-[#F0F4F8] uppercase tracking-[0.2em]">
+           Session Complete
         </h1>
-        
-        <p className="mt-8 font-mono text-[#B6CABD] tracking-widest text-sm uppercase">
-          Time Survived
-        </p>
-        <p className="text-4xl font-mono mt-2 text-white">
-          {Math.floor(timeSurvived)}s
-        </p>
+
+        <div className="flex gap-12 mt-10">
+            <div>
+                <p className="font-mono text-[#90CDF4] tracking-widest text-[10px] uppercase">Duration</p>
+                <p className="text-3xl font-mono mt-2 text-white">{Math.floor(sessionDuration)}s</p>
+            </div>
+            <div>
+                <p className="font-mono text-[#F6E05E] tracking-widest text-[10px] uppercase">Harmony</p>
+                <p className="text-3xl font-mono mt-2 text-white">{Math.floor(harmony)}%</p>
+            </div>
+        </div>
 
         <div className="mt-12 w-full space-y-4">
           {!isConnected ? (
-            <button 
+            <button
               onClick={() => connect({ connector: injected() })}
-              className="w-full py-4 bg-white text-black font-mono uppercase tracking-widest text-xs hover:bg-gray-200 transition-colors"
+              className="w-full py-4 bg-gradient-to-r from-[#2B6CB0]/30 to-[#319795]/30 text-white font-mono uppercase tracking-[0.2em] text-xs hover:from-[#2B6CB0]/40 hover:to-[#319795]/40 transition-colors rounded-full border border-white/10"
             >
               Connect Wallet (Base)
             </button>
           ) : (
             <>
-              <p className="font-mono text-xs text-gray-400 mb-4 break-all">
-                Connected: {address}
+              <p className="font-mono text-[10px] text-[#A0AEC0] mb-4 break-all bg-black/30 p-2 rounded-lg inline-block">
+                {address}
               </p>
-              
-              <button 
+
+              <button
                 onClick={handleRecordOnChain}
                 disabled={isPending}
-                className="w-full py-4 border border-red-500 text-red-500 font-mono uppercase tracking-widest text-xs hover:bg-red-500 hover:text-white transition-all disabled:opacity-50"
+                className="w-full py-4 border border-[#BEE3F8]/30 text-[#BEE3F8] font-mono uppercase tracking-[0.15em] text-xs hover:bg-[#BEE3F8]/10 transition-all disabled:opacity-50 rounded-full"
               >
-                {isPending ? 'Recording...' : 'Record This Nightmare On-Chain'}
+                {isPending ? 'Recording State...' : 'Record Session On-Chain'}
               </button>
 
-               <button 
-                onClick={handleSayGM}
-                disabled={isPending}
-                className="w-full py-4 border border-white/20 text-white font-mono uppercase tracking-widest text-xs hover:bg-white/10 transition-all disabled:opacity-50"
-              >
-                Say "GM" On-Chain
-              </button>
-
-               <button 
+              <button
                 onClick={() => disconnect()}
-                className="text-xs font-mono text-gray-500 uppercase tracking-widest underline mt-4 block mx-auto"
+                className="text-[10px] font-mono text-[#718096] uppercase tracking-widest underline mt-4 block mx-auto"
               >
                 Disconnect
               </button>
@@ -99,20 +85,18 @@ export default function ResultScreen() {
           )}
 
           <div className="pt-8">
-            <button 
+            <button
               onClick={() => {
                 resetGame();
                 setScreen('title');
               }}
-              className="text-xs font-mono text-[#B6CABD] uppercase tracking-widest hover:text-white transition-colors"
+              className="text-[10px] font-mono text-[#A0AEC0] uppercase tracking-[0.2em] hover:text-white transition-colors"
             >
-              Return to the shadows
+              Return to Sanctuary
             </button>
           </div>
         </div>
       </div>
-      
-      <div className="noise-overlay" />
     </motion.div>
   );
 }

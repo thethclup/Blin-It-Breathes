@@ -1,33 +1,34 @@
 import { create } from 'zustand';
 
-export type GameScreen = 'title' | 'saferoom' | 'game' | 'result' | 'leaderboard';
+export type GameScreen = 'title' | 'sanctuary' | 'game' | 'result' | 'leaderboard';
 
 interface GameState {
   screen: GameScreen;
-  sanity: number; // 0 to 100
-  timeSurvived: number; // in seconds
+  harmony: number; // 0 to 100
+  sessionDuration: number; // in seconds
   isPlaying: boolean;
-  
+
   setScreen: (screen: GameScreen) => void;
-  setSanity: (sanity: number | ((prev: number) => number)) => void;
-  setTimeSurvived: (time: number | ((prev: number) => number)) => void;
+  setHarmony: (harmony: number | ((prev: number) => number)) => void;
+  setSessionDuration: (time: number | ((prev: number) => number)) => void;
   setIsPlaying: (isPlaying: boolean) => void;
   resetGame: () => void;
 }
 
 export const useGameStore = create<GameState>((set) => ({
   screen: 'title',
-  sanity: 100,
-  timeSurvived: 0,
+  harmony: 50,
+  sessionDuration: 0,
   isPlaying: false,
-  
+
   setScreen: (screen) => set({ screen }),
-  setSanity: (sanity) => set((state) => ({ 
-    sanity: Math.max(0, Math.min(100, typeof sanity === 'function' ? sanity(state.sanity) : sanity)) 
+  setHarmony: (harmony) => set((state) => ({
+    harmony: Math.max(0, Math.min(100, typeof harmony === 'function' ? harmony(state.harmony) : harmony))
   })),
-  setTimeSurvived: (time) => set((state) => ({
-    timeSurvived: typeof time === 'function' ? time(state.timeSurvived) : time
+  setSessionDuration: (time) => set((state) => ({
+    sessionDuration: typeof time === 'function' ? time(state.sessionDuration) : time
   })),
   setIsPlaying: (isPlaying) => set({ isPlaying }),
-  resetGame: () => set({ sanity: 100, timeSurvived: 0, isPlaying: false })
+  resetGame: () => set({ harmony: 50, sessionDuration: 0, isPlaying: false })
 }));
+
